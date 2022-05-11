@@ -25,7 +25,7 @@ class CategoryManager: ObservableObject {
         self.category = category
         if categoriesAll.isEmpty {
             let networkManager = NetworkManager()
-            networkManager.loadData(urlString: "\(Constants.siteUrl)category.php", parameters: [:]){ (result: Result<[Category], Error>) in
+            networkManager.loadData(urlString: "\(Constant.siteUrl.rawValue)\(Constant.category)/", parameters: [:]){ (result: Result<[Category], Error>) in
                 switch result {
                 case .success(let category):
                     self.categoriesAll = category

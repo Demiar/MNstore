@@ -8,36 +8,33 @@
 import SwiftUI
 
 struct CartView: View {
-    
-    @StateObject var itemsCart = ItemsCart.shared
+    @ObservedObject var productCartManager = ProductCartManager.shared
     
     var body: some View {
             NavigationView{
-                VStack{
-                    List{//($itemsCart.itemsCart){ $item in
-                        if $itemsCart.itemsCart.isEmpty {
-                            Text("Нет товаров в корзине!")
-                        } else {
-                            ForEach($itemsCart.itemsCart) { $item in
+                if productCartManager.cartEmpty {
+                    Text("Нет товаров в корзине!")
+                } else {
+                    VStack{
+                        List{
+                            ForEach($productCartManager.products) { $product in
                                 HStack{
                                     ZStack(alignment: .leading){
                                         NavigationLink(destination: {
-                                            ProductViewDetail(product: item.product)
+                                            //ProductViewDetail(product: product)
                                         }){
                                         }
                                         .opacity(0)
-                                        CartViewCell(productCart: $item)
+                                        CartViewCell(productCart: $product)
                                     }
 
                                 }
                                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 12, alignment: .leading)
                             }
 
-                        }
 
-                    }
-                    if !$itemsCart.itemsCart.isEmpty {
-                        Text("Сумма заказа: \(itemsCart.sumCart(), specifier: "%.2f")")
+                        }
+                        Text("Сумма заказа: \(String(format: "%.2f", productCartManager.sumCart()))")
                             .padding()
                         NavigationLink(destination: {ConfirmOrder()},
                                        label: {
@@ -50,11 +47,11 @@ struct CartView: View {
                                                 )
                                         }
                         )
-
                     }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("Корзина")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .navigationTitle("Корзина")
+                }
+
         }
     }
 }

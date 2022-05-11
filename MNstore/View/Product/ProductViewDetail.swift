@@ -11,16 +11,14 @@ struct ProductViewDetail: View {
     let product: Product
     
     @State var quantity: Int = 1
-    var price: Float = 10
     
-    private let itemsCart: ItemsCart = ItemsCart.shared
+    private let productCartManager = ProductCartManager.shared
     @ObservedObject private var imageLoader: ImageLoader
     
 
     
     init(product: Product) {
         self.product = product
-        self.price = Float(product.price)
         self.quantity = 1
         self.imageLoader = ImageLoader(url: product.detailPicture)
     }
@@ -35,12 +33,12 @@ struct ProductViewDetail: View {
                 .padding()
             HStack{
                 Spacer()
-                Text("Цена: \(price, specifier: "%.0f")")
+                Text("Цена: \(product.price)")
                 Spacer()
                 StepperCustom(value: $quantity, product: product)
                 Spacer()
                 Button(action: {
-                    ItemsCart.shared.addItemCart(product: product, price: price, count: quantity)
+                    productCartManager.addCart(productId: product.id, price: product.price, quantity: quantity)
                 }){
                     Image(systemName: "cart.badge.plus")
                         .resizable()

@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct ProductCart: Identifiable {
-    let id: UUID
-    let product: Product
-    var count: Int
-    let price: Float
+struct ProductCart: Identifiable, Decodable {
+    let id, productId, price, fuserId: Int
+    let currency, name: String
+    var quantity: Int
+    //let canBuy: Bool
 }

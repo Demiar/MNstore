@@ -10,6 +10,7 @@ import SwiftUI
 struct LoginView: View {
     @State var login: String = "aleksei"
     @State var password: String = "03118686"
+    @State private var selection: Bool = false
     
     @StateObject private var authManager = AuthManager.shared
     
@@ -27,7 +28,6 @@ struct LoginView: View {
                 .border(.red, width: 2)
             Button(action: {
                 authManager.logIn(login: login, password: password)
-                //logged = true
             }, label: {
                 Text("Войти")
             })
@@ -50,18 +50,21 @@ struct LoginView: View {
                     .stroke(Color.red, lineWidth: 2)
             )
             .padding()
-            Button(action: {
-                
-            }, label: {
-                Text("Забыли пароль?")
-            })
-            .foregroundColor(.red)
-            .frame(width: 160, height: 30)
-            .overlay(
-                RoundedRectangle(cornerRadius: 2)
-                    .stroke(Color.red, lineWidth: 2)
-            )
-            .padding()
+            NavigationLink(destination: ForgotPasswordView(), isActive: $selection) {
+                Button(action: {
+                    self.selection = true
+                }, label: {
+                    Text("Забыли пароль?")
+                })
+                .foregroundColor(.red)
+                .frame(width: 160, height: 30)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 2)
+                        .stroke(Color.red, lineWidth: 2)
+                )
+                .padding()
+            }
+
             
         }
     }

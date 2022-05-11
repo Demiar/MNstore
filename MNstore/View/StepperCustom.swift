@@ -12,6 +12,8 @@ struct StepperCustom: View {
     var step: Int = 1
     var maximum: Int = 100
     let product: Product?
+    var productId: Int = 0
+    var price: Int = 0
     
     var body: some View {
         HStack{
@@ -19,8 +21,7 @@ struct StepperCustom: View {
                 if value > 1 {
                     value -= step
                 } else {
-                    guard let prod = product else { return }
-                        ItemsCart.shared.deleteItemCart(product: prod)
+                    ProductCartManager.shared.deleteCart(productId: productId, quantity: value)
                 }
             }, label: {
                 Image(systemName: "minus")

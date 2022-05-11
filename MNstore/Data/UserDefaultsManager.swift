@@ -12,6 +12,7 @@ class UserDefaultsManager {
 }
 
 enum NameStrings: String {
+    case id
     case login
     case password
     case authorized

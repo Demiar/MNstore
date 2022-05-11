@@ -12,6 +12,7 @@ class ProductManager: ObservableObject {
     var categoryId: Int
     var category: Category
     @Published var products: [Product] = []
+    @Published var product: Product?
     @Published var isLoading: Bool = false
     private var canLoadMorePages: Bool = true
     private var networkManager = NetworkManager()
@@ -24,11 +25,27 @@ class ProductManager: ObservableObject {
         loadProducts(sectionId: categoryId)
     }
     
+    func loadProduct(id: Int){
+        networkManager.loadData(urlString: "\(Constant.siteUrl.rawValue)\(Constant.product)/",
+                                parameters: ["id" : "\(id)",
+                                             "type" : "getProduct"
+                                            ]
+        ) { (result: Result<Product, Error>) in
+            switch result {
+            case .success(let product):
+                self.product = product
+            case .failure(let error):
+                    print(error)
+            }
+        }
+    }
+    
     func loadProducts(sectionId: Int) {
         guard !isLoading && canLoadMorePages else { return }
         isLoading = true
-        networkManager.loadData(urlString: "\(Constants.siteUrl)products.php",
+        networkManager.loadData(urlString: "\(Constant.siteUrl.rawValue)\(Constant.product)/",
                                 parameters: ["sectionId" : "\(sectionId)",
+                                             "type": "getProducts",
                                             "numPage" : "\(numPage)",
                                             "pageSize" : "\(pageSize)"
                                             ]
